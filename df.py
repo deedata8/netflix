@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 
 df = pd.read_csv('data/Netflix.csv')
@@ -6,18 +5,17 @@ df = pd.read_csv('data/Netflix.csv')
 #trim off spaces in column headings
 df.rename(columns=lambda x: x.strip(), inplace=True)
 
-#df[['Revenue','Subscribers']].apply(pd.to_numeric)
+#clean data, convert to numeric
 df['Revenue'] = df['Revenue'].str.replace(',', '').astype(float)
 df['Subscribers'] = df['Subscribers'].str.replace(',', '').astype(float)
-
 df['Qtr'] = pd.to_numeric(df['Years'].str[1:2])
 df['Year'] = pd.to_numeric(df['Years'].str[5:])
 df.dropna(inplace=True)
 
-
+#chart df in in millions
 chart_df = df.groupby(['Year', 'Qtr']).sum()/1000000
 
-#get qtr(s) and yr(s) to present
+#get qtr(s) and yr(s) to present in chart
 def groupings(list_qtrs, list_yrs):
     q = []
     y = []
@@ -30,11 +28,11 @@ def groupings(list_qtrs, list_yrs):
         for j in list_yrs:
             y.append(j)
 
-    tuple1 = list(zip(q,y))
-    return tuple1
+    tuple_ = list(zip(q,y))
+    return tuple_
 
-#get revenue based on qtr of yr
-def get_vals(list_tups):
+#get revenue based on qtr and yr
+def get_rev(list_tups):
     list_y = []
     for i, ii in list_tups:
         try:
@@ -45,7 +43,7 @@ def get_vals(list_tups):
             pass
     return list_y
 
-#get sunscriber count based on qtr and yr
+#get subscriber count based on qtr and yr
 def get_subs(list_tups):
     list_y = []
     for i, ii in list_tups:
