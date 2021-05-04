@@ -2,20 +2,16 @@ from __future__ import print_function
 from bokeh.io import output_file
 from bokeh.models import FactorRange, ColumnDataSource, CheckboxButtonGroup, RadioButtonGroup
 from bokeh.plotting import figure, show
-from bokeh.models import Range1d, LinearAxis
+from bokeh.models import Range1d, LinearAxis, HoverTool, Tabs, Panel, Div
 import panel as pn
 import param
 import numpy as np
 import pandas as pd
-from bokeh.layouts import layout
+from bokeh.layouts import layout, column , row
 from bokeh.io import curdoc, show
 import logging
 import sys
 from df import groupings, get_rev, get_subs
-
-#data range inputs for initial generation of chart
-qtrs_ = [1,2,3,4]
-yrs_ = [2018,2019,2020]
 
 #logger = logging.getLogger()
 #logger.warning("THIS IS A WARNING MESSAGE")
@@ -44,12 +40,16 @@ def create_chart(factors, y_subs):
     return p
 
 def update(attr, old ,new):
-    #can only work for one year-- need to implement widget that returns list of years and qtrs
-    year = int(options[radio.active])
+    qtrs = []
     years = []
-    years.append(year) 
-    #qtrs_ a global var
-    factors, data_chart = transform_inputs(qtrs_, years)
+
+    for i in button_group_qtr.active:
+        qtrs.append(int(options_qtr[i]))
+
+    for i in button_group_yr.active:
+        years.append(int(options_yr[i]))
+
+    factors, data_chart = transform_inputs(qtrs, years)
     y = get_rev(data_chart)
     y_subs = get_subs(data_chart)
     source.data = {
@@ -57,21 +57,59 @@ def update(attr, old ,new):
         'y': y,
         'y_subs': y_subs
     }
+    #print(source.data)
 
-factors, data_chart = transform_inputs(qtrs_,yrs_)
+
+
+options_yr=['2018', '2019', '2020']
+button_group_yr=CheckboxButtonGroup(labels=options_yr)
+button_group_yr.on_change("active",update)
+
+options_qtr=['1', '2', '3', '4']
+button_group_qtr=CheckboxButtonGroup(labels=options_qtr)
+button_group_qtr.on_change("active",update)
+
+factors, data_chart = transform_inputs(options_qtr, options_yr)
 y_rev = get_rev(data_chart)
 y_subs = get_subs(data_chart)
 source = ColumnDataSource(data=dict(x=factors, y=y_rev, y_subs=y_subs))
 p = create_chart(factors, y_subs)
 
-options=['2018', '2019', '2020']
-radio=RadioButtonGroup(labels=options)
-radio.on_change("active",update)
+hover = HoverTool(tooltips=[
+    ('qtr,yr','@x'),
+    ('revenue','$@y{0.1f} m'), 
+    ('subscribers','@y_subs{0.0 a}m')])
+p.add_tools(hover)
 
-#to render widgets in page
-lay_out = layout([
-    p,
-    radio
-])
+p1 = figure(plot_width=300, plot_height=300)
+p1.circle([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], size=20, color="navy", alpha=0.5)
+tab1 = Panel(child=p1, title="circle")
 
-curdoc().add_root(lay_out)
+p2 = figure(plot_width=300, plot_height=300)
+p2.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=3, color="navy", alpha=0.5)
+tab2 = Panel(child=p2, title="line")
+
+# l = layout([
+#     [p],
+#     [button_group_qtr],
+#     [button_group_yr] 
+# ])
+l = column(
+    row(p), 
+    row(Div(text="<h3>Quarter(s)</h3>"), button_group_qtr),
+    row(Div(text="<h3>Year(s)</h3>"), button_group_yr)
+    )
+
+tab = Panel(child=l, title="Revenue")
+
+tabs = Tabs(tabs=[ tab, tab1, tab2 ])
+
+# lay_out = layout([
+#     tab 
+# ])
+
+# curdoc().add_root(lay_out)
+
+
+
+curdoc().add_root(tabs)
