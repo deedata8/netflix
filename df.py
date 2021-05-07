@@ -8,49 +8,38 @@ df.rename(columns=lambda x: x.strip(), inplace=True)
 #clean data, convert to numeric
 df['Revenue'] = df['Revenue'].str.replace(',', '').astype(float)
 df['Subscribers'] = df['Subscribers'].str.replace(',', '').astype(float)
+df['Area'] = df['Area'].str.replace(',', '')
 df['Qtr'] = pd.to_numeric(df['Years'].str[1:2])
 df['Year'] = pd.to_numeric(df['Years'].str[5:])
+df.drop(columns=['Years'], inplace=True)
 df.dropna(inplace=True)
+
+dataframe = df.groupby(['Year', 'Qtr', 'Area']).sum()/1000000
 
 #chart df in in millions
 chart_df = df.groupby(['Year', 'Qtr']).sum()/1000000
 
-#get qtr(s) and yr(s) to present in chart
-def groupings(list_qtrs, list_yrs):
-    q = []
-    y = []
+#get qtr, yr, [area] tuples to present in charts
+def groupings(qtrs:list, yrs:list, areas:list=[]) -> tuple:
+    q, y, a = [], [], []
     
-    for n in range(len(list_qtrs)):
-        for i in range(len(list_yrs)):
-            q.append(list_qtrs[n])
+    if len(areas) > 0:
+        #start with most narrow grouping
+        for n in range(len(areas)):
+            for i in qtrs:
+                for j in yrs:
+                    a.append(areas[n])
+                    q.append(i)
+                    y.append(j)
+        
+    else: 
+        for n in range(len(qtrs)):
+            for j in yrs:
+                q.append(qtrs[n])
+                y.append(j)
+                a.append("")
     
-    for n in range(len(list_qtrs)):
-        for j in list_yrs:
-            y.append(j)
-
-    tuple_ = list(zip(q,y))
+    tuple_ = list(zip(q,y,a))
     return tuple_
 
-#get revenue based on qtr and yr
-def get_rev(list_tups):
-    list_y = []
-    for i, ii in list_tups:
-        try:
-            df = chart_df.query('Year == @ii and Qtr == @i' )
-            list_y.append(df.Revenue.values[0])
-        except:
-            list_y.append(0)
-            pass
-    return list_y
 
-#get subscriber count based on qtr and yr
-def get_subs(list_tups):
-    list_y = []
-    for i, ii in list_tups:
-        try:
-            df = chart_df.query('Year == @ii and Qtr == @i' )
-            list_y.append(df.Subscribers.values[0])
-        except:
-            list_y.append(0)
-            pass
-    return list_y

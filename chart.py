@@ -3,18 +3,12 @@ from bokeh.io import output_file
 from bokeh.models import FactorRange, ColumnDataSource, CheckboxButtonGroup, RadioButtonGroup
 from bokeh.plotting import figure, show
 from bokeh.models import Range1d, LinearAxis, HoverTool, Tabs, Panel, Div
-import panel as pn
-import param
 import numpy as np
 import pandas as pd
 from bokeh.layouts import layout, column , row
 from bokeh.io import curdoc, show
-import logging
 import sys
 from df import groupings, get_rev, get_subs
-
-#logger = logging.getLogger()
-#logger.warning("THIS IS A WARNING MESSAGE")
 
 def transform_inputs(qtrs_list, years_list):
     data_chart = groupings(qtrs_list, years_list)
