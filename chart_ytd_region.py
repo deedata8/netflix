@@ -4,6 +4,7 @@ from bokeh.layouts import layout, column, row
 from data import groupings, dataframe,  transform_inputs
 from classPeriodAmounts import PeriodAmounts
 from widgets import button_group_area4, button_group_qtr4, button_group_yr4, options_qtr4, options_yr4, options_area4
+from bokeh.transform import factor_cmap
 #from bar_chart import create_chart
 
 from bokeh.io import curdoc
@@ -13,14 +14,19 @@ from bokeh.plotting import figure
 from bokeh.models import Range1d, LinearAxis
 
 
-def create_chart(factors, source):
+#ADDED COLOR BASED ON REGION
+
+palette = ["blue", "red", "green", "yellow"]
+
+#grouped bar charts with assigned colors
+def create_chart(factors, source, color_factors):
 
     p = figure(x_range=FactorRange(*factors), plot_height=350,
         toolbar_location=None, tools="")
 
-    #p.vbar_stack(area, x='x', width=0.9, color=colors, source=source, legend_label=area)
-
-    p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source)
+    p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source,
+        fill_color=factor_cmap('x', palette=palette, factors=color_factors, start=2, end=3))
+    
     p.y_range.start = 0
 
     p.extra_y_ranges = {"Subscribers": Range1d(start=0, end=100)}
@@ -28,7 +34,7 @@ def create_chart(factors, source):
     p.add_layout(LinearAxis(y_range_name="Subscribers"), 'right')
 
     p.x_range.range_padding = 0.1
-    p.xaxis.major_label_orientation = 1
+    p.xaxis.major_label_orientation = 'vertical'#1
     p.xgrid.grid_line_color = None
 
     return p
@@ -77,15 +83,17 @@ button_group_area4.on_change("active",update_chart)
 
 #CREATE CHART FOR BY QTR AND BY YEAR
 #starting params in chart, widgets only takes a list of strings
-factors, params_chart = transform_inputs(['1','2','3','4'], ['2018','2019','2020'], ['United States and Canada'])
+factors, params_chart = transform_inputs(options_qtr4, options_yr4[-2:], [options_area4[0]])
+
 #instantiate for plotting data with df
 chart1_data = PeriodAmounts(dataframe)
 rev, subs = chart1_data.get_ytd(params_chart)
+
 source = ColumnDataSource(data=dict(x=factors, y=rev, y_subs=subs))
-p = create_chart(factors, source)
+p = create_chart(factors, source, options_area4)
 #annotations settings
 hover = HoverTool(tooltips=[
-    ('qtr,yr','@x'),
+    #('qtr,yr','@x'),
     ('qtd revenue','$@y{0.1f} m'), 
     ('subscribers','@y_subs{0.0 a}m')])
 p.add_tools(hover)
@@ -99,7 +107,7 @@ l = column(
 
 tab_ytd_region = Panel(child=l, title="YTD Rev By Region")
 
-#tabs = Tabs(tabs=[ tab_ytd_region ])
+tabs = Tabs(tabs=[ tab_ytd_region ])
 
-#curdoc().add_root(tabs)
+curdoc().add_root(tabs)
 

@@ -12,15 +12,6 @@ from bokeh.models import FactorRange #requires list of string tuples
 from bokeh.plotting import figure
 from bokeh.models import Range1d, LinearAxis
 
-# #x-range to only be qtr and year
-# area = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
-# colors = ["#c9d9d3", "#718dbf", "#e84d60", "red"]
-
-# data = {
-#     factorx: qtr&year
-#     Area1: []
-#     Area2: []
-# }
 
 
 def create_chart(factors, source):
@@ -38,7 +29,7 @@ def create_chart(factors, source):
     p.add_layout(LinearAxis(y_range_name="Subscribers"), 'right')
 
     p.x_range.range_padding = 0.1
-    p.xaxis.major_label_orientation = 1
+    p.xaxis.major_label_orientation = 'vertical'
     p.xgrid.grid_line_color = None
 
     return p
@@ -95,7 +86,7 @@ source = ColumnDataSource(data=dict(x=factors, y=rev, y_subs=subs))
 p = create_chart(factors, source)
 #annotations settings
 hover = HoverTool(tooltips=[
-    ('qtr,yr','@x'),
+    #('qtr,yr','@x'),
     ('qtd revenue','$@y{0.1f} m'), 
     ('subscribers','@y_subs{0.0 a}m')])
 p.add_tools(hover)
