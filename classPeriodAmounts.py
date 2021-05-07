@@ -1,4 +1,3 @@
-
 class PeriodAmounts():
     
     """Return QTD or YTD Revenue and Subscriber count"""
@@ -12,7 +11,6 @@ class PeriodAmounts():
     def groupby_yq(self):
         df_ = self.df.groupby(['Year', 'Qtr']).sum()
         return df_
-    
     
     def get_qtd(self, data_refs: tuple) -> list:
         qtd_rev = []
@@ -52,7 +50,7 @@ class PeriodAmounts():
                 y_rev = 0
                 try:
                     #for each row, sum with prior quarters
-                    for i in range(1, q+1):
+                    for i in range(1, int(q)+1):
                         row = df_.query('Year == @y and Qtr == @i')
                         y_rev += row.iloc[0]['Revenue']
                     ytd_rev.append(y_rev)
@@ -63,6 +61,7 @@ class PeriodAmounts():
                 except:
                     ytd_rev.append(0)
                     ytd_sub.append(0)
+    
         else:
             for q, y, a in data_refs:
                 y_rev = 0
