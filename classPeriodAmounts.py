@@ -29,14 +29,14 @@ class PeriodAmounts():
                     qtr_sub.append(0)
         else:
             for q, y, a in data_refs:
-                try:
+                try:            
                     row = self.df.query('Qtr == @q and Year == @y and Area == @a' )
                     qtd_rev.append(row.Revenue.values[0])
                     qtr_sub.append(row.Subscribers.values[0])
                 except:
                     qtd_rev.append(0)
                     qtr_sub.append(0)
-                
+        print("FROM CLASS REV", qtd_rev)
         return qtd_rev, qtr_sub
     
     
@@ -67,7 +67,7 @@ class PeriodAmounts():
                 y_rev = 0
                 try:
                     #for row, sum with prior quarters based on area
-                    for i in range(1, q+1):
+                    for i in range(1, int(q)+1):
                         row = self.df.query('Year == @y and Qtr == @i and Area == @a' )
                         y_rev += row.iloc[0]['Revenue']
                     ytd_rev.append(y_rev)
@@ -81,17 +81,3 @@ class PeriodAmounts():
     
         return ytd_rev, ytd_sub
 
-
-# from df import data
-# from df import groupings
-
-# t = groupings([1,2,3,4], [2018,2019,2020])
-# t2 = groupings([2,3,4], [2018,2019,2020], ['United States and Canada','Latin America','Asia-Pacific'])
-
-# #print(t)
-# print(t2)
-
-# amounts = PeriodAmounts(data)
-# revs, subs = amounts.get_ytd(t2)
-# print('REV', revs)
-# print('SUBS', subs)
