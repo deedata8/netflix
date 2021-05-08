@@ -12,6 +12,7 @@ class PeriodAmounts():
         df_ = self.df.groupby(['Year', 'Qtr']).sum()
         return df_
     
+    #qtr, yr, [area] in args -> returns rev, subs count
     def get_qtd(self, data_refs: tuple) -> list:
         qtd_rev = []
         qtr_sub = []
@@ -39,7 +40,7 @@ class PeriodAmounts():
         print("FROM CLASS REV", qtd_rev)
         return qtd_rev, qtr_sub
     
-    
+    #qtr, yr, [area] in args -> returns rev, subs count
     def get_ytd(self, data_refs: tuple) -> list:
         ytd_rev = []
         ytd_sub = []
@@ -80,4 +81,51 @@ class PeriodAmounts():
                     ytd_sub.append(0)
     
         return ytd_rev, ytd_sub
+
+    #data structures for bokeh stacked bar chart       
+    #list of (qtr,yr,[]) tuple, and list of area in args -> returns dict = 'x':[(qtr-yr)], area:[rev] 
+    def get_area_y_ytd(self, data_refs_qy: tuple, area:list) -> dict:
+        region = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
+        ytd_sub = []
+        dict_ = {}
+        qtr_yr = []
+        #exclude [blank area] in tuples
+        for i in data_refs_qy:
+            qtr_yr.append(i[:2])
+        dict_['x'] = qtr_yr
+
+        #below queries for only the region selected
+        for a in area:
+            ytd_rev = []
+            for q, y in qtr_yr:
+                y_rev = 0
+                #for row, sum with prior quarters based on area
+                for i in range(1, int(q)+1):
+                    try:
+                        row = self.df.query('Year == @y and Qtr == @i and Area == @a' )
+                        y_rev += row.iloc[0]['Revenue']
+                    except:
+                        y_rev = 0
+                ytd_rev.append(y_rev)
+            dict_[a] = ytd_rev
+
+       #return for all regions b/c plot cannot change y axis presented for stacked bar chart
+        for i in region:
+            if i in area:
+                
+                pass
+            else:
+                
+
+
+        return dict_
+
+    
+
+    
+
+
+
+
+
 

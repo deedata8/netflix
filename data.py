@@ -15,8 +15,8 @@ df.dropna(inplace=True)
 
 dataframe = df.groupby(['Year', 'Qtr', 'Area']).sum()/1000000
 
-#chart df in in millions
-chart_df = df.groupby(['Year', 'Qtr']).sum()/1000000
+# #chart df in in millions
+# chart_df = df.groupby(['Year', 'Qtr']).sum()/1000000
 
 #get qtr, yr, [area] tuples to present in charts, QTR and YEAR in lists are int
 def groupings(qtrs:list, yrs:list, areas:list=[]) -> tuple:
@@ -49,3 +49,5 @@ def transform_inputs(qtrs_list, years_list, areas_list=[]):
     #convert all tuple values into strings in order to use in bokeh classification: FactorRange
     factors = [tuple(str(x) for x in tup) for tup in params_chart]
     return factors, params_chart
+
+

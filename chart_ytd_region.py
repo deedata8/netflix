@@ -25,6 +25,7 @@ def create_chart(factors, source, color_factors):
         toolbar_location=None, tools="")
 
     p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source,
+        #x: [(qtr, yr, region)], for 'region' color- start positon 2 and end at position 3
         fill_color=factor_cmap('x', palette=palette, factors=color_factors, start=2, end=3))
     
     p.y_range.start = 0
@@ -110,4 +111,5 @@ tab_ytd_region = Panel(child=l, title="YTD Rev By Region")
 tabs = Tabs(tabs=[ tab_ytd_region ])
 
 curdoc().add_root(tabs)
+
 
