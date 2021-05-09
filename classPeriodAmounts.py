@@ -83,7 +83,7 @@ class PeriodAmounts():
         return ytd_rev, ytd_sub
 
     #data structures for bokeh stacked bar chart       
-    #list of (qtr,yr,[]) tuple, and list of area in args -> returns dict = 'x':[(qtr-yr)], area:[rev] 
+    #list of (qtr,yr,[]) tuple, and list of area in args -> returns dict = 'x':[(qtr-yr)], area:[rev] for CDS
     def get_area_y_ytd(self, data_refs_qy: tuple, area:list) -> dict:
         region = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
         ytd_sub = []
@@ -95,33 +95,32 @@ class PeriodAmounts():
         dict_['x'] = qtr_yr
 
         #below queries for only the region selected
-        for a in area:
+        for r in region:
             ytd_rev = []
             for q, y in qtr_yr:
                 y_rev = 0
                 #for row, sum with prior quarters based on area
                 for i in range(1, int(q)+1):
-                    try:
-                        row = self.df.query('Year == @y and Qtr == @i and Area == @a' )
-                        y_rev += row.iloc[0]['Revenue']
-                    except:
+                    if r in area:
+                        try:
+                            row = self.df.query('Year == @y and Qtr == @i and Area == @r' )
+                            y_rev += row.iloc[0]['Revenue']
+                        except:
+                            y_rev = 0
+                    else:
                         y_rev = 0
                 ytd_rev.append(y_rev)
-            dict_[a] = ytd_rev
-
-       #return for all regions b/c plot cannot change y axis presented for stacked bar chart
-        for i in region:
-            if i in area:
-                
-                pass
-            else:
-                
-
+            dict_[r] = ytd_rev
 
         return dict_
 
-    
 
+# from data import dataframe
+# factors = [('2', '2020', ''), ('2', '2019', '')] 
+# b = ['Europe,  Middle East and Africa', 'Asia-Pacific']
+# chart1 = PeriodAmounts(dataframe)
+# source = chart1.get_area_y_ytd(factors, b)
+# print(source)
     
 
 

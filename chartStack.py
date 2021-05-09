@@ -17,8 +17,6 @@ from bokeh.models import Range1d, LinearAxis
 from data import dataframe 
 from classPeriodAmounts import PeriodAmounts 
 
-#palette = ["blue", "red"]
-#region = ['United States and Canada', 'Latin America']
 
 palette = ["blue", "red", "green", "yellow"]
 region = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
@@ -58,6 +56,40 @@ def create_chart(factors, source, region, palette):
     return p
 
 
+# def update_chart(attr, old ,new):
+#     qtrs = []
+#     years = []
+#     areas = []
+
+#     for i in button_group_qtr4.active:
+#         qtrs.append(int(options_qtr4[i]))
+
+#     for i in button_group_yr4.active:
+#         years.append(int(options_yr4[i]))
+    
+#     for i in button_group_area4.active:
+#         areas.append(options_area4[i])
+          
+#     factors, params_chart = transform_inputs(qtrs, years)
+#     print("factors:",factors, "params", params_chart)
+#     try:
+#         #when qtr, yr, AND area are selected
+#         params_chart[0][2]
+#         print('**************PRINT-TRY:REGION', params_chart[0][2])
+#         dict_ = chart1.get_area_y_ytd(params_chart, areas)
+#         p.x_range.factors = factors
+#         source.data = dict_
+#         print('=================TRY SOURCE UPDATED', source.data)
+#     except:
+#         print('=====EXCEPTION')
+#         # source.data = {
+#         #     'x': factors
+#         # }
+#         pass
+
+#     print('UPDATED SOURCE ALL DONE', source.data)
+
+
 def update_chart(attr, old ,new):
     qtrs = []
     years = []
@@ -75,21 +107,30 @@ def update_chart(attr, old ,new):
     factors, params_chart = transform_inputs(qtrs, years)
     print("factors:",factors, "params", params_chart)
     try:
-        #when qtr, yr, AND area are selected
+        #when qtr AND yr are selected (area is '') 
         params_chart[0][2]
-        print('**************PRINT-TRY:REGION', params_chart[0][2])
-        dict_ = chart1.get_area_y_ytd(params_chart, areas)
         p.x_range.factors = factors
-        source.data = dict_
-        print('=================TRY SOURCE UPDATED', source.data)
+        dict_ = chart1.get_area_y_ytd(params_chart, areas)
+        source.data = {
+            'x': factors,
+            'United States and Canada': dict_['United States and Canada'],
+            'Latin America':  dict_['Latin America'],
+            'Europe,  Middle East and Africa':  dict_['Europe,  Middle East and Africa'],
+            'Asia-Pacific':  dict_['Asia-Pacific']
+        }
     except:
-        print('=====EXCEPTION')
-        # source.data = {
-        #     'x': factors
-        # }
-        pass
+        source.data = {
+            'x': [('0','0','')],
+            'United States and Canada': [0],
+            'Latin America': [0],
+            'Europe,  Middle East and Africa': [0],
+            'Asia-Pacific': [0]
+        }
+        #p.x_range.factors = []
+    print('UPDATED SOURCE', source.data)
 
-    print('UPDATED SOURCE ALL DONE', source.data)
+
+
 
 
 
@@ -101,7 +142,7 @@ button_group_area4.on_change("active",update_chart)
 
 #for stacked charts, need to call all region for every x call or else the chart will break
 factors = [('2', '2020', '')] 
-b = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
+b = ['United States and Canada', 'Latin America']
 chart1 = PeriodAmounts(dataframe)
 dict_ = chart1.get_area_y_ytd(factors, b)
 
