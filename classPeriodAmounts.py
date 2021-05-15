@@ -115,11 +115,62 @@ class PeriodAmounts():
         return dict_
 
 
+    def get_area_y_ytd1(self, data_refs_qy: tuple, area:list) -> dict:
+
+        ytd_sub = []
+        dict_ = {}
+        qtr_yr = []
+        #exclude [blank area] in tuples
+        for i in data_refs_qy:
+            qtr_yr.append(i[:2])
+        dict_['x'] = qtr_yr
+
+        #below queries for only the region selected
+        for r in area:
+            ytd_rev = []
+            for q, y in qtr_yr:
+                y_rev = 0
+                #for row, sum with prior quarters based on area
+                for i in range(1, int(q)+1):
+                    if r in area:
+                        try:
+                            row = self.df.query('Year == @y and Qtr == @i and Area == @r' )
+                            y_rev += row.iloc[0]['Revenue']
+                        except:
+                            y_rev = 0
+                    else:
+                        y_rev = 0
+                ytd_rev.append(y_rev)
+            dict_[r] = ytd_rev
+
+        return dict_
+
+    
+    def get_area_specific_ytd(self, data_refs_qy: tuple, area: str) -> list:
+
+        #ytd_sub = []
+
+        #below queries for only the region selected        
+        ytd_rev = []
+        for q, y, a in data_refs_qy:
+            y_rev = 0
+            #for row, sum with prior quarters based on area
+            for i in range(1, int(q)+1):
+                try:
+                    row = self.df.query('Year == @y and Qtr == @i and Area == @area' )
+                    y_rev += row.iloc[0]['Revenue']
+                except:
+                    y_rev = 0
+            ytd_rev.append(y_rev)
+
+        return ytd_rev
+
+
 # from data import dataframe
 # factors = [('2', '2020', ''), ('2', '2019', '')] 
-# b = ['Europe,  Middle East and Africa', 'Asia-Pacific']
+# b = ['Europe,  Middle East and Africa']
 # chart1 = PeriodAmounts(dataframe)
-# source = chart1.get_area_y_ytd(factors, b)
+# source = chart1.get_area_specific_ytd(factors, b)
 # print(source)
     
 

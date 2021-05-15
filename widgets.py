@@ -39,3 +39,14 @@ button_group_qtr4=CheckboxButtonGroup(labels=options_qtr4)
 
 options_area4=['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
 button_group_area4=CheckboxButtonGroup(labels=options_area4)
+
+
+#stacked bar chart ytd_region
+options_yr5=['2018', '2019', '2020']
+button_group_yr5=CheckboxButtonGroup(labels=options_yr5)
+
+options_qtr5=['1', '2', '3', '4']
+button_group_qtr5=CheckboxButtonGroup(labels=options_qtr5)
+
+options_area5=['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
+button_group_area5=CheckboxButtonGroup(labels=options_area5)

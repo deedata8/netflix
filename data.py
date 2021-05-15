@@ -43,7 +43,7 @@ def groupings(qtrs:list, yrs:list, areas:list=[]) -> tuple:
 
 
 #list of params from widget inputs
-def transform_inputs(qtrs_list, years_list, areas_list=[]):
+def transform_inputs(qtrs_list=[], years_list=[], areas_list=[]):
     #create list of tuples (qtrs and yrs are int) with all selections to use for PeriodAmounts class
     params_chart = groupings(qtrs_list, years_list, areas_list)
     #convert all tuple values into strings in order to use in bokeh classification: FactorRange
