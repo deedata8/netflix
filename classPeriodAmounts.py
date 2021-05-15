@@ -81,43 +81,10 @@ class PeriodAmounts():
                     ytd_sub.append(0)
     
         return ytd_rev, ytd_sub
-
-    #data structures for bokeh stacked bar chart       
-    #list of (qtr,yr,[]) tuple, and list of area in args -> returns dict = 'x':[(qtr-yr)], area:[rev] for CDS
-    def get_area_y_ytd(self, data_refs_qy: tuple, area:list) -> dict:
-        region = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
-        ytd_sub = []
-        dict_ = {}
-        qtr_yr = []
-        #exclude [blank area] in tuples
-        for i in data_refs_qy:
-            qtr_yr.append(i[:2])
-        dict_['x'] = qtr_yr
-
-        #below queries for only the region selected
-        for r in region:
-            ytd_rev = []
-            for q, y in qtr_yr:
-                y_rev = 0
-                #for row, sum with prior quarters based on area
-                for i in range(1, int(q)+1):
-                    if r in area:
-                        try:
-                            row = self.df.query('Year == @y and Qtr == @i and Area == @r' )
-                            y_rev += row.iloc[0]['Revenue']
-                        except:
-                            y_rev = 0
-                    else:
-                        y_rev = 0
-                ytd_rev.append(y_rev)
-            dict_[r] = ytd_rev
-
-        return dict_
-
-
+    
+    
     def get_area_y_ytd1(self, data_refs_qy: tuple, area:list) -> dict:
-
-        ytd_sub = []
+        #ytd_sub = []
         dict_ = {}
         qtr_yr = []
         #exclude [blank area] in tuples
@@ -144,7 +111,7 @@ class PeriodAmounts():
             dict_[r] = ytd_rev
 
         return dict_
-
+        
     
     def get_area_specific_ytd(self, data_refs_qy: tuple, area: str) -> list:
 

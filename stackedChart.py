@@ -25,28 +25,34 @@ from bokeh.plotting import figure
 from bokeh.models import Range1d, LinearAxis, VBar
 
 
+colors_region = {
+    'United States and Canada': "blue", 
+    'Latin America': "red",   
+    'Europe,  Middle East and Africa': "green",   
+    'Asia-Pacific': "yellow"
+    }
 
 #qtr, year
-fruits = [('1', '2018',''), ('2', '2018','')]
-#region
-years = ['United States and Canada', 'Latin America']
-colors1 = ["blue", "red", "yellow", "green"]
-colors = ["blue", "red"]
+period = [('1', '2018',''), ('2', '2018','')]
+region = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa','Asia-Pacific']
+colors = ["blue", "red", "green", "yellow"]
 
-data = {'fruits' : fruits,
+data = {'x' : period,
         'United States and Canada' : [2000, 1000],
-        'Latin America' : [5000, 3000]}
-
+        'Latin America' : [5000, 3000],
+        'Europe,  Middle East and Africa': [6000, 3000],
+        'Asia-Pacific': [4000, 4000]
+        }
 
 #figure set
-p = figure(x_range=FactorRange(*fruits), plot_height=250, #plot_width=100, 
-           title="Fruit Counts by Year",
+p = figure(x_range=FactorRange(*period), plot_height=250, #plot_width=100, 
+           title="Revenue Year-to-date",
            toolbar_location=None, tools="hover", 
            tooltips="$name @fruits: @$name")
 
 #starting glyphs
-p.vbar_stack(years, x='fruits', width=0.9, color=colors, source=data,
-             legend=[value(x) for x in years])
+p.vbar_stack(region, x='x', width=0.9, color=colors, source=data,
+            legend_label = region)
 
 p.y_range.start = 0
 p.x_range.range_padding = 0.1
@@ -73,44 +79,43 @@ def update_chart(attr, old, new):
         areas.append(options_area5[i])
 
     factors, params_chart = transform_inputs(qtrs, years)
-    print("===========factors:",factors, "================params", params_chart)
     chart1 = PeriodAmounts(dataframe)
     dict_ = chart1.get_area_y_ytd1(params_chart, areas)
-    print("DICTIONARY FOR DATA------------------", dict_)
 
     try:
+        #if an area selected or change in regions selection --> trigger update/regen chart
         if len(dict_) > 1:
 
-            my_palette_updated=len(areas)
-            colors_updated = colors1[:my_palette_updated]
-
-            fruits_updated = factors
+            colors_updated = []
+            for i in dict_:
+                if i == "x":
+                    pass
+                else:
+                    colors_updated.append(colors_region[i])
 
             dict1 = {key: value for key, value in dict_.items() if key != "x"}
-            years_updated = list(dict1.keys())
+            regions_updated = list(dict1.keys())
 
             #appears need to be in this format and update by key for the chart to regenerate
-            data_updated = {'x' : fruits_updated,
-                'United States and Canada' : chart1.get_area_specific_ytd(fruits_updated, 'United States and Canada'), 
-                'Latin America' : chart1.get_area_specific_ytd(fruits_updated, 'Latin America'),   
-                'Europe,  Middle East and Africa' : chart1.get_area_specific_ytd(fruits_updated, 'Europe,  Middle East and Africa'),   
-                'Asia-Pacific' : chart1.get_area_specific_ytd(fruits_updated, 'Asia-Pacific')
+            data_updated = {'x' : factors,
+                'United States and Canada' : chart1.get_area_specific_ytd(factors, 'United States and Canada'), 
+                'Latin America' : chart1.get_area_specific_ytd(factors, 'Latin America'),   
+                'Europe,  Middle East and Africa' : chart1.get_area_specific_ytd(factors, 'Europe,  Middle East and Africa'),   
+                'Asia-Pacific' : chart1.get_area_specific_ytd(factors, 'Asia-Pacific')
                 }
 
             #reset glyphs by removing them
             for i in range(len(p.renderers), 1, -1):
                 if type(p.renderers[i-1]) == GlyphRenderer:
-                    print("glyph")
                     p.renderers.pop(i-1)
                 elif type(p.renderers[i-1]) == Legend:
-                    print("legend")
                     p.renderers.pop(i-1)
         
-            p.vbar_stack(years_updated, x='x', width=0.9, color=colors_updated, 
+            p.vbar_stack(regions_updated, x='x', width=0.9, color=colors_updated, 
                         source=data_updated,
-                        legend=[value(x) for x in years_updated])
+                        legend_label = regions_updated)
             
-            p.x_range.factors=fruits_updated
+            p.x_range.factors=factors
             p.y_range.start = 0
             p.x_range.range_padding = 0.1
             p.xgrid.grid_line_color = None
@@ -118,12 +123,13 @@ def update_chart(attr, old, new):
             p.outline_line_color = None
             p.legend.location = "top_left"
             p.legend.orientation = "horizontal"
-            #p.add_tools(HoverTool(tooltips="$name @fruits: @$name"))
+            p.add_tools(HoverTool(tooltips="$name @fruits: @$name"))
 
         else:
-            print('+++++++++++++++++++DOES NOT UPDATE', params_chart[0][2])
+            #print('NO UPDATE', params_chart[0][2])
+            pass
     except:
-        print('+++++++++++++++++++DOES NOT EXIST params_chart[0][2]')
+        #print('+++++++++++++++++++DOES NOT EXIST params_chart[0][2]')
         pass
 
 
