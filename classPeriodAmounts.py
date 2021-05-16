@@ -37,7 +37,7 @@ class PeriodAmounts():
                 except:
                     qtd_rev.append(0)
                     qtr_sub.append(0)
-        print("FROM CLASS REV", qtd_rev)
+        #print("FROM CLASS REV", qtd_rev)
         return qtd_rev, qtr_sub
     
     #qtr, yr, [area] in args -> returns rev, subs count
@@ -82,7 +82,7 @@ class PeriodAmounts():
     
         return ytd_rev, ytd_sub
     
-    
+    #return dict for CDS if needed, return rev for list of areas by qtr-yr
     def get_area_y_ytd1(self, data_refs_qy: tuple, area:list) -> dict:
         #ytd_sub = []
         dict_ = {}
@@ -111,12 +111,10 @@ class PeriodAmounts():
             dict_[r] = ytd_rev
 
         return dict_
-        
-    
+
+    #return list of rev only for secified area
     def get_area_specific_ytd(self, data_refs_qy: tuple, area: str) -> list:
-
         #ytd_sub = []
-
         #below queries for only the region selected        
         ytd_rev = []
         for q, y, a in data_refs_qy:

@@ -5,7 +5,7 @@ from bokeh.models import Range1d, LinearAxis
 
 def create_chart(factors, source):
 
-    p = figure(x_range=FactorRange(*factors), plot_height=350,
+    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000,
         toolbar_location=None, tools="")
 
     p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source)

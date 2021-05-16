@@ -16,10 +16,8 @@ from bokeh.models import Range1d, LinearAxis
 
 def create_chart(factors, source):
 
-    p = figure(x_range=FactorRange(*factors), plot_height=350,
+    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000, 
         toolbar_location=None, tools="")
-
-    #p.vbar_stack(area, x='x', width=0.9, color=colors, source=source, legend_label=area)
 
     p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source)
     p.y_range.start = 0
@@ -29,7 +27,7 @@ def create_chart(factors, source):
     p.add_layout(LinearAxis(y_range_name="Subscribers"), 'right')
 
     p.x_range.range_padding = 0.1
-    p.xaxis.major_label_orientation = 'vertical'
+    p.xaxis.major_label_orientation = 0.95 #'vertical'
     p.xgrid.grid_line_color = None
 
     return p
@@ -68,7 +66,7 @@ def update_chart(attr, old ,new):
             'y_subs': []
         }
         #p.x_range.factors = []
-    print('UPDATED SOURCE', source.data)
+    #print('UPDATED SOURCE', source.data)
 
 
 
@@ -93,9 +91,9 @@ p.add_tools(hover)
 #first tab
 l = column(
     row(p), 
-    row(Div(text="<h3>Quarter(s)</h3>"), button_group_qtr3),
-    row(Div(text="<h3>Year(s)</h3>"), button_group_yr3),
-    row(Div(text="<h3>Region(s)</h3>"), button_group_area3)
+    row(Div(text="<h3>Quarter</h3>"), button_group_qtr3),
+    row(Div(text="<h3>Year</h3>"), button_group_yr3),
+    row(Div(text="<h3>Region</h3>"), button_group_area3)
     )
 
 tab_qtd_region = Panel(child=l, title="QTD Rev By Region")

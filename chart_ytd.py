@@ -61,8 +61,8 @@ p2.add_tools(hover2)
 #second tab
 l2 = column(
     row(p2), 
-    row(Div(text="<h3>Quarter(s)</h3>"), button_group_qtr2),
-    row(Div(text="<h3>Year(s)</h3>"), button_group_yr2)
+    row(Div(text="<h3>Quarter</h3>"), button_group_qtr2),
+    row(Div(text="<h3>Year</h3>"), button_group_yr2)
     )
 tab_ytd = Panel(child=l2, title="YTD Revenue")
 

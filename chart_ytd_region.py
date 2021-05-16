@@ -15,13 +15,12 @@ from bokeh.models import Range1d, LinearAxis
 
 
 #ADDED COLOR BASED ON REGION
-
 palette = ["blue", "red", "green", "yellow"]
 
 #grouped bar charts with assigned colors
 def create_chart(factors, source, color_factors):
 
-    p = figure(x_range=FactorRange(*factors), plot_height=350,
+    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000,
         toolbar_location=None, tools="")
 
     p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source,
@@ -35,7 +34,7 @@ def create_chart(factors, source, color_factors):
     p.add_layout(LinearAxis(y_range_name="Subscribers"), 'right')
 
     p.x_range.range_padding = 0.1
-    p.xaxis.major_label_orientation = 'vertical'#1
+    p.xaxis.major_label_orientation = 0.95 #'vertical'#1
     p.xgrid.grid_line_color = None
 
     return p
@@ -74,7 +73,7 @@ def update_chart(attr, old ,new):
             'y_subs': []
         }
         #p.x_range.factors = []
-    print('UPDATED SOURCE', source.data)
+    #print('UPDATED SOURCE', source.data)
 
 
 
@@ -101,15 +100,15 @@ p.add_tools(hover)
 #first tab
 l = column(
     row(p), 
-    row(Div(text="<h3>Quarter(s)</h3>"), button_group_qtr4),
-    row(Div(text="<h3>Year(s)</h3>"), button_group_yr4),
-    row(Div(text="<h3>Region(s)</h3>"), button_group_area4),
+    row(Div(text="<h3>Quarter</h3>"), button_group_qtr4),
+    row(Div(text="<h3>Year</h3>"), button_group_yr4),
+    row(Div(text="<h3>Region</h3>"), button_group_area4),
     )
 
 tab_ytd_region = Panel(child=l, title="YTD Rev By Region")
 
-tabs = Tabs(tabs=[ tab_ytd_region ])
+#tabs = Tabs(tabs=[ tab_ytd_region ])
 
-curdoc().add_root(tabs)
+#curdoc().add_root(tabs)
 
 

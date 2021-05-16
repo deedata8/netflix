@@ -58,8 +58,8 @@ p.add_tools(hover)
 #first tab
 l = column(
     row(p), 
-    row(Div(text="<h3>Quarter(s)</h3>"), button_group_qtr),
-    row(Div(text="<h3>Year(s)</h3>"), button_group_yr)
+    row(Div(text="<h3>Quarter</h3>"), button_group_qtr),
+    row(Div(text="<h3>Year</h3>"), button_group_yr)
     )
 
 tab_qtd = Panel(child=l, title="QTD Revenue")
