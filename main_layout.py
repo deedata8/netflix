@@ -6,8 +6,10 @@ from chart_ytd import tab_ytd
 from chart_qtd_region import tab_qtd_region
 from chart_ytd_region import tab_ytd_region
 from chart_ytd_region_stacked import tab_ytd_stacked
+from csv_dl import main 
 
+#bokeh serve main_layout.py
 
-tabs = Tabs(tabs=[ tab_qtd, tab_ytd, tab_ytd_stacked, tab_qtd_region, tab_ytd_region ])
+tabs = Tabs(tabs=[ tab_qtd, tab_ytd, tab_ytd_stacked, tab_qtd_region, tab_ytd_region, main.csv_dl ])
 
 curdoc().add_root(tabs)
