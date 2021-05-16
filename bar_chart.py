@@ -19,6 +19,8 @@ def create_chart(factors, source):
     p.x_range.range_padding = 0.1
     p.xaxis.major_label_orientation = 1
     p.xgrid.grid_line_color = None
+    p.axis.minor_tick_line_color = None
+    p.outline_line_color = None
 
     return p
 
@@ -26,7 +28,7 @@ def create_chart(factors, source):
 #grouped bar charts with assigned colors
 def create_chart_region(factors, source, color_factors, palette):
 
-    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000,
+    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000, 
         toolbar_location=None, tools="")
 
     p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source,
@@ -41,6 +43,8 @@ def create_chart_region(factors, source, color_factors, palette):
     p.x_range.range_padding = 0.1
     p.xaxis.major_label_orientation = 0.95 
     p.xgrid.grid_line_color = None
+    p.axis.minor_tick_line_color = None
+    p.outline_line_color = None
 
     return p
 

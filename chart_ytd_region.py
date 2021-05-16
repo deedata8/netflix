@@ -1,6 +1,6 @@
 from bokeh.models import ColumnDataSource
 from bokeh.models import HoverTool, Div, Panel
-from bokeh.layouts import column, row
+from bokeh.layouts import column, row, layout
 from widgets import button_group_area4, button_group_qtr4, button_group_yr4, options_qtr4, options_yr4, options_area4
 from bar_chart import create_chart_region
 from classPeriodAmounts import PeriodAmounts
@@ -62,13 +62,37 @@ hover = HoverTool(tooltips=[
     ('qtd revenue','$@y{0.1f} m'), 
     ('subscribers','@y_subs{0.0 a}m')])
 p.add_tools(hover)
-#first tab
-l = column(
-    row(p), 
-    row(Div(text="<h3>Quarter</h3>"), button_group_qtr4),
-    row(Div(text="<h3>Year</h3>"), button_group_yr4),
-    row(Div(text="<h3>Region</h3>"), button_group_area4),
+
+l = layout(children = [
+    column(
+        row(
+            column(p,
+                sizing_mode='scale_both'
+            )
+        ),
+        row(
+            column(
+                Div(text="<h3></h3>"),
+                sizing_mode='scale_both'
+            )
+        ),
+        row(
+            column(
+                row(Div(text="<h3>Quarter</h3>")),
+                row([button_group_qtr4])
+            ),
+            column(
+                row(Div(text="<h3>Year</h3>")),
+                row([button_group_yr4])
+            ),
+            column(
+                row(Div(text="<h3>Area</h3>")),
+                row([button_group_area4])
+            ), 
+            sizing_mode = 'scale_width'
+        )
     )
+], sizing_mode='scale_both')
 
 tab_ytd_region = Panel(child=l, title="YTD Rev By Region")
 

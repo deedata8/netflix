@@ -2,7 +2,7 @@ from bokeh.plotting import figure
 from bokeh.layouts import row
 from bokeh.models import GlyphRenderer, HoverTool, FactorRange, Legend
 from bokeh.models import HoverTool, Div, Panel
-from bokeh.layouts import column, row
+from bokeh.layouts import column, row, layout
 from widgets import button_group_area5, button_group_qtr5, button_group_yr5, options_qtr5, options_yr5, options_area5
 from widgets import DEFAULT_YRS, DEFAULT_QTRS
 from data import dataframe,  transform_inputs
@@ -110,12 +110,25 @@ button_group_qtr5.on_change("active",update_chart)
 button_group_area5.on_change("active",update_chart)
 
 
-l = column(
-    row(p), 
-    row(Div(text="<h3>Quarter</h3>"), button_group_qtr5),
-    row(Div(text="<h3>Year</h3>"), button_group_yr5),
-    row(Div(text="<h3>Region</h3>"), button_group_area5)
+l = layout(children = [
+    column(
+        row(p),
+        column(
+            column(
+                row(Div(text="<h3>Quarter</h3>")),
+                row([button_group_qtr5]),
+            ),
+            column(
+                row(Div(text="<h3>Year</h3>")),
+                row([button_group_yr5]),
+            ),
+                column(
+                row(Div(text="<h3>Region</h3>")),
+                row([button_group_area5]),
+            ),
+            sizing_mode = 'scale_width'
+        ),
     )
-
+], sizing_mode='scale_both')
 
 tab_ytd_stacked = Panel(child=l, title="YTD Rev By Region Stacked")
