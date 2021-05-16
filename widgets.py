@@ -1,10 +1,26 @@
 from bokeh.models import CheckboxButtonGroup
 
 
-OPTIONS_YEARS = ['2018', '2019', '2020']
-OPTIONS_QTRS = ['1', '2', '3', '4']
-OPTIONS_AREAS = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
+#REGION_PALLETE = ["blue", "red", "green", "yellow"]
+REGION_PALLETE = ['#6baed6','#fd8d3c', '#74c476', '#9e9ac8']
 
+COLORS_REGION = {
+    'United States and Canada': "#6baed6", 
+    'Latin America': "#fd8d3c",   
+    'Europe,  Middle East and Africa': "#74c476",   
+    'Asia-Pacific': "#9e9ac8"
+    }
+
+DEFAULT_QTRS = ['1', '2', '3', '4']
+DEFAULT_YRS = ['2018']
+DEFAULT_AREAS = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
+
+
+
+###widgets###
+OPTIONS_QTRS = ['1', '2', '3', '4']
+OPTIONS_YEARS = ['2018', '2019', '2020']
+OPTIONS_AREAS = ['United States and Canada', 'Latin America', 'Europe,  Middle East and Africa', 'Asia-Pacific']
 
 #chart qtd
 options_yr=OPTIONS_YEARS

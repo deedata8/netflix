@@ -1,10 +1,11 @@
 from bokeh.models import ColumnDataSource
 from bokeh.models import HoverTool, Div, Panel
-from bokeh.layouts import layout, column , row
-from data import groupings, dataframe,  transform_inputs
-from classPeriodAmounts import PeriodAmounts
+from bokeh.layouts import column , row
 from widgets import button_group_qtr, button_group_yr, options_qtr, options_yr
+from widgets import DEFAULT_YRS, DEFAULT_QTRS
 from bar_chart import create_chart
+from data import dataframe,  transform_inputs
+from classPeriodAmounts import PeriodAmounts
 
 
 def update_chart(attr, old ,new):
@@ -43,7 +44,7 @@ button_group_qtr.on_change("active",update_chart)
 
 #CREATE CHART FOR BY QTR AND BY YEAR
 #starting params in chart
-factors, params_chart = transform_inputs(['1','2','3','4'], ['2018','2019','2020'])
+factors, params_chart = transform_inputs(DEFAULT_QTRS, DEFAULT_YRS)
 #instantiate for plotting data with df
 chart1_data = PeriodAmounts(dataframe)
 rev, subs = chart1_data.get_qtd(params_chart)

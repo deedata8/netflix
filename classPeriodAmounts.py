@@ -131,16 +131,5 @@ class PeriodAmounts():
         return ytd_rev
 
 
-# from data import dataframe
-# factors = [('2', '2020', ''), ('2', '2019', '')] 
-# b = ['Europe,  Middle East and Africa']
-# chart1 = PeriodAmounts(dataframe)
-# source = chart1.get_area_specific_ytd(factors, b)
-# print(source)
-    
-
-
-
-
 
 
