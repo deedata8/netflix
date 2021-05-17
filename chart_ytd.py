@@ -52,7 +52,7 @@ rev, subs = chart_data.get_ytd(params_chart)
 
 source = ColumnDataSource(data=dict(x=factors, y=rev, y_subs=subs))
 
-p = create_chart(factors, source)
+p = create_chart(factors, source, 'Netflix Revenue and Subscriber Count, YTD')
 
 #annotations settings
 hover2 = HoverTool(tooltips=[

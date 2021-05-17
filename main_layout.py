@@ -10,6 +10,6 @@ from csv_dl import main
 
 #bokeh serve main_layout.py
 
-tabs = Tabs(tabs=[ tab_qtd, tab_ytd, tab_ytd_stacked, tab_qtd_region, tab_ytd_region, main.csv_dl ])
+tabs = Tabs(tabs=[ tab_qtd, tab_ytd, tab_qtd_region, tab_ytd_region, tab_ytd_stacked, main.csv_dl ])
 
 curdoc().add_root(tabs)

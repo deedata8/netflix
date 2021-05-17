@@ -43,8 +43,14 @@ l = layout(children = [
     column(
         column(
             column(
-                row(Div(text="<h3>Data from Kaggle</h3>")),
+                row(Div(text="<h3>Download data used in Netflix Dashboard:</h3>")),
                 row([button]),
+            ),
+            column(
+                row(Div(text="<a href='https://www.kaggle.com/pariaagharabi/netflix2020'>Original Kaggle Netflix Data Set</a>")),
+            ),
+            column(
+                row(Div(text="<a href='https://github.com/deedata8/netflix'>GitHub Source Code</a>")),
             ),
             column(
                 row(Div(text="<h3></h3>")),

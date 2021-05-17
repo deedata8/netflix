@@ -57,7 +57,7 @@ factors, params_chart = transform_inputs(DEFAULT_QTRS, DEFAULT_YRS, DEFAULT_AREA
 chart1_data = PeriodAmounts(dataframe)
 rev, subs = chart1_data.get_qtd(params_chart)
 source = ColumnDataSource(data=dict(x=factors, y=rev, y_subs=subs))
-p = create_chart_region(factors, source, options_area3, REGION_PALLETE)
+p = create_chart_region(factors, source, options_area3, REGION_PALLETE, 'Netflix Revenue and Subscriber Count, QTD')
 #annotations settings
 hover = HoverTool(tooltips=[
     #('qtr,yr','@x'),

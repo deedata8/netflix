@@ -4,9 +4,9 @@ from bokeh.models import Range1d, LinearAxis
 from bokeh.transform import factor_cmap
 
 
-def create_chart(factors, source):
+def create_chart(factors, source, title):
 
-    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000,
+    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000, title=title,
         toolbar_location=None, tools="")
 
     p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source)
@@ -26,9 +26,9 @@ def create_chart(factors, source):
 
 
 #grouped bar charts with assigned colors
-def create_chart_region(factors, source, color_factors, palette):
+def create_chart_region(factors, source, color_factors, palette, title):
 
-    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000, 
+    p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000, title=title,
         toolbar_location=None, tools="")
 
     p.vbar(x='x', top='y', width=0.9, alpha=0.5, source=source,

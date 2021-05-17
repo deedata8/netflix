@@ -26,7 +26,7 @@ data = {'x' : factors,
 
 #figure set
 p = figure(x_range=FactorRange(*factors), plot_height=350, plot_width=1000, 
-        title="Revenue Year-to-date",
+        title='Netflix Revenue, YTD (stacked)',
         toolbar_location=None, tools="hover", 
         tooltips="$name @x: @$name")
 
